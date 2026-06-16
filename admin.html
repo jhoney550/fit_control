@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - FitControl</title>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="auth-body">
+  <main class="auth-card">
+    <div class="brand">
+      <div class="brand-icon">ADM</div>
+      <div><h1>Admin</h1><p>Cadastro controlado de professores</p></div>
+    </div>
+
+    <section id="adminUnlock">
+      <label for="adminKey">Chave de administrador</label>
+      <input id="adminKey" type="password" placeholder="Informe a chave"/>
+      <button class="primary-btn" onclick="liberarAdmin()">Liberar cadastro</button>
+    </section>
+
+    <section id="adminForm" class="hidden">
+      <label for="profNome">Nome do professor</label>
+      <input id="profNome" type="text" placeholder="Nome"/>
+      <label for="profEmail">E-mail</label>
+      <input id="profEmail" type="email" placeholder="professor@email.com"/>
+      <label for="profSenha">Senha</label>
+      <input id="profSenha" type="password" placeholder="Mínimo 6 caracteres"/>
+      <button class="primary-btn" onclick="criarProfessorAdmin()">Criar professor</button>
+      <button class="ghost-btn full" onclick="window.location.href='index.html'">Voltar</button>
+    </section>
+
+    <div id="msg" class="msg"></div>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

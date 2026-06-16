@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Professor - FitControl</title>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="app-body">
+  <div class="drawer-backdrop" onclick="fecharMenu()"></div>
+
+  <aside class="drawer" id="drawer">
+    <div class="drawer-header">
+      <div class="brand-icon small">FC</div>
+      <div><strong>FitControl</strong><span id="drawerUserName">Professor</span></div>
+      <button class="drawer-close" onclick="fecharMenu()">×</button>
+    </div>
+
+    <nav class="drawer-nav">
+      <button class="drawer-link active" data-page="dashboard">Dashboard</button>
+      <button class="drawer-link" data-page="perfil">Perfil</button>
+      <button class="drawer-link" data-page="alunos">Alunos</button>
+      <button class="drawer-link" data-page="cadastro">Cadastrar aluno</button>
+      <button class="drawer-link" data-page="treino">Montar treino</button>
+      <button class="drawer-link" data-page="progresso">Progresso</button>
+      <button class="drawer-link" data-page="config">Configurações</button>
+    </nav>
+
+    <button class="logout-btn" onclick="sair()">Sair</button>
+  </aside>
+
+  <header class="app-topbar">
+    <button class="menu-btn" onclick="abrirMenu()">☰</button>
+    <div><strong>FitControl</strong><span id="professorNomeTopo">Professor</span></div>
+    <button class="ghost-btn compact" onclick="sair()">Sair</button>
+  </header>
+
+  <main class="app-main">
+    <section class="page active" id="page-dashboard">
+      <div class="hero"><h1>Dashboard</h1><p id="boasVindasProfessor">Resumo geral.</p></div>
+      <section class="grid">
+        <div class="card stat"><span>Total de alunos</span><strong id="totalAlunos">0</strong></div>
+        <div class="card stat"><span>Concluídos hoje</span><strong id="totalConcluidosHoje">0</strong></div>
+        <div class="card stat"><span>Treinos cadastrados</span><strong id="totalTreinos">0</strong></div>
+        <div class="card stat"><span>Exercícios cadastrados</span><strong id="totalExercicios">0</strong></div>
+      </section>
+      <section class="card"><h2>Visão rápida</h2><div id="dashboardAlunos" class="list"></div></section>
+    </section>
+
+    <section class="page" id="page-perfil">
+      <div class="hero"><h1>Perfil</h1><p>Atualize seus dados.</p></div>
+      <section class="card">
+        <div class="profile-card">
+          <div class="avatar-preview" id="profAvatarPreview">P</div>
+          <div class="form-grid">
+            <input id="profPerfilNome" placeholder="Nome"/>
+            <input id="profPerfilEmail" type="email" placeholder="E-mail"/>
+            <input id="profPerfilSenha" type="password" placeholder="Nova senha"/>
+            <input id="profPerfilFoto" placeholder="URL da foto opcional"/>
+          </div>
+        </div>
+        <button class="primary-btn inline" onclick="salvarPerfilProfessor()">Salvar perfil</button>
+      </section>
+    </section>
+
+    <section class="page" id="page-alunos">
+      <div class="hero"><h1>Alunos</h1><p>Visualize os alunos cadastrados.</p></div>
+      <section class="card"><h2>Lista de alunos</h2><div id="listaAlunos" class="list"></div></section>
+    </section>
+
+    <section class="page" id="page-cadastro">
+      <div class="hero"><h1>Cadastrar aluno</h1><p>Crie o acesso do aluno.</p></div>
+      <section class="card">
+        <div class="form-grid">
+          <input id="alunoNome" placeholder="Nome do aluno"/>
+          <input id="alunoEmail" type="email" placeholder="E-mail"/>
+          <input id="alunoSenha" type="password" placeholder="Senha"/>
+          <input id="alunoWhatsapp" placeholder="WhatsApp"/>
+          <input id="alunoPeso" type="number" placeholder="Peso kg"/>
+          <input id="alunoAltura" type="number" placeholder="Altura cm"/>
+          <select id="alunoObjetivo">
+            <option value="Hipertrofia">Hipertrofia</option>
+            <option value="Emagrecimento">Emagrecimento</option>
+            <option value="Força">Força</option>
+            <option value="Condicionamento">Condicionamento</option>
+            <option value="Saúde geral">Saúde geral</option>
+          </select>
+        </div>
+        <button class="primary-btn inline" onclick="cadastrarAluno()">Cadastrar aluno</button>
+      </section>
+    </section>
+
+    <section class="page" id="page-treino">
+      <div class="hero"><h1>Montar treino</h1><p>Selecione o aluno, dia e exercícios.</p></div>
+      <section class="card">
+        <div class="form-grid">
+          <select id="selectAluno"></select>
+          <select id="diaSemana">
+            <option value="1">Segunda-feira</option><option value="2">Terça-feira</option>
+            <option value="3">Quarta-feira</option><option value="4">Quinta-feira</option>
+            <option value="5">Sexta-feira</option><option value="6">Sábado</option><option value="0">Domingo</option>
+          </select>
+          <input id="nomeTreino" placeholder="Nome do treino"/>
+        </div>
+        <h3>Novo exercício</h3>
+        <div class="form-grid">
+          <input id="exNome" list="listaExercicios" placeholder="Exercício"/>
+          <datalist id="listaExercicios"></datalist>
+          <input id="exSeries" type="number" placeholder="Séries"/>
+          <input id="exReps" placeholder="Repetições"/>
+          <input id="exCarga" placeholder="Carga"/>
+          <input id="exDescanso" placeholder="Descanso"/>
+          <input id="exObs" placeholder="Observação"/>
+        </div>
+        <button class="primary-btn inline" onclick="salvarExercicioNoTreino()">Salvar exercício</button>
+      </section>
+      <section class="card"><h2>Treino do aluno selecionado</h2><div id="treinoAlunoSelecionado" class="list"></div></section>
+    </section>
+
+    <section class="page" id="page-progresso">
+      <div class="hero"><h1>Progresso</h1><p>Acompanhe a execução dos alunos.</p></div>
+      <section class="card"><div id="listaProgresso" class="list"></div></section>
+    </section>
+
+    <section class="page" id="page-config">
+      <div class="hero"><h1>Configurações</h1><p>Configurações locais.</p></div>
+      <section class="card danger-zone"><h2>Resetar sistema</h2><p class="meta">Apaga os dados locais e recria os dados de teste.</p><button class="danger-btn" onclick="resetarSistema()">Resetar dados locais</button></section>
+    </section>
+
+    <div id="msg" class="msg fixed-msg"></div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/professor.js"></script>
+</body>
+</html>
