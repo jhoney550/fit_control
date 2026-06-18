@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="/">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="FitControl - Gestão de treinos para professores e alunos">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="FitControl">
+  <meta name="theme-color" content="#0D1117">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <title>FitControl</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      background-color: #0D1117;
+      color: #F0F6FC;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    #loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      gap: 16px;
+      padding: 24px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    .logo {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #39D353, #0EA5E9);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: white;
+    }
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #30363D;
+      border-top-color: #39D353;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    #loading-message {
+      color: #8B949E;
+      font-size: 14px;
+    }
+    #startup-error {
+      display: none;
+      width: min(460px, calc(100% - 48px));
+      margin: 15vh auto 0;
+      padding: 24px;
+      box-sizing: border-box;
+      background: #161B22;
+      border: 1px solid #F85149;
+      border-radius: 14px;
+      text-align: center;
+    }
+    #startup-error h1 {
+      margin: 16px 0 8px;
+      font-size: 20px;
+    }
+    #startup-error p {
+      color: #C9D1D9;
+      line-height: 1.5;
+      margin: 0 0 18px;
+    }
+    #startup-error button {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 18px;
+      background: #39D353;
+      color: #0D1117;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div id="loading">
+    <div class="logo">FC</div>
+    <div class="spinner"></div>
+    <div id="loading-message">Carregando o painel administrativo...</div>
+  </div>
+  <div id="startup-error" role="alert">
+    <div class="logo" style="margin: 0 auto;">FC</div>
+    <h1>Não foi possível abrir o FitControl Admin</h1>
+    <p id="startup-error-message">A aplicação demorou mais que o esperado para iniciar.</p>
+    <button type="button" onclick="window.location.reload()">Tentar novamente</button>
+  </div>
+  <script>
+    (function () {
+      var startupFinished = false;
+      var startupTimer;
+      function hideLoading() {
+        var loading = document.getElementById('loading');
+        if (loading) loading.style.display = 'none';
+      }
+      function showStartupError(message) {
+        if (startupFinished) return;
+        window.clearTimeout(startupTimer);
+        hideLoading();
+        var errorBox = document.getElementById('startup-error');
+        var errorMessage = document.getElementById('startup-error-message');
+        if (errorMessage && message) errorMessage.textContent = message;
+        if (errorBox) errorBox.style.display = 'block';
+      }
+      window.addEventListener('flutter-first-frame', function () {
+        startupFinished = true;
+        window.clearTimeout(startupTimer);
+        hideLoading();
+        var errorBox = document.getElementById('startup-error');
+        if (errorBox) errorBox.style.display = 'none';
+      });
+      window.addEventListener('error', function (event) {
+        if (!startupFinished) {
+          showStartupError('Falha ao carregar os arquivos da aplicação.');
+          console.error('Erro durante a inicialização do Flutter:', event.error || event.message);
+        }
+      });
+      window.addEventListener('unhandledrejection', function (event) {
+        if (!startupFinished) {
+          showStartupError('O Firebase ou os arquivos do aplicativo não responderam.');
+          console.error('Falha não tratada durante a inicialização:', event.reason);
+        }
+      });
+      window.fitControlStartupError = showStartupError;
+      startupTimer = window.setTimeout(function () {
+        showStartupError('A aplicação não iniciou em 20 segundos.');
+      }, 20000);
+    }());
+  </script>
+  <script
+    src="flutter_bootstrap.js"
+    async
+    onerror="window.fitControlStartupError && window.fitControlStartupError('O arquivo flutter_bootstrap.js não foi encontrado.')"
+  ></script>
+</body>
+</html>
